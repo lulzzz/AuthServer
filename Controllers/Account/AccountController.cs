@@ -14,7 +14,6 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -114,7 +113,7 @@ namespace AuthServer.Controllers.Account
                             IsPersistent = true,
                             ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
                         };
-                    };
+                    }
 
                     await HttpContext.SignInAsync(user.Id, user.UserName, props);
 
@@ -223,8 +222,8 @@ namespace AuthServer.Controllers.Account
                     if (AccountOptions.IncludeWindowsGroups)
                     {
                         var wi = wp.Identity as WindowsIdentity;
-                        var groups = wi.Groups.Translate(typeof(NTAccount));
-                        var roles = groups.Select(x => new Claim(JwtClaimTypes.Role, x.Value));
+                        var groups = wi?.Groups?.Translate(typeof(NTAccount));
+                        var roles = groups?.Select(x => new Claim(JwtClaimTypes.Role, x.Value));
                         id.AddClaims(roles);
                     }
 
@@ -310,11 +309,11 @@ namespace AuthServer.Controllers.Account
 
             // if the external provider issued an id_token, we'll keep it for signout
             AuthenticationProperties props = null;
-            var id_token = result.Properties.GetTokenValue("id_token");
-            if (id_token != null)
+            var idToken = result.Properties.GetTokenValue("id_token");
+            if (idToken != null)
             {
                 props = new AuthenticationProperties();
-                props.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = id_token } });
+                props.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = idToken } });
             }
 
             // issue authentication cookie for user
@@ -349,8 +348,8 @@ namespace AuthServer.Controllers.Account
                 {
                     EnableLocalLogin = false,
                     ReturnUrl = returnUrl,
-                    Username = context?.LoginHint,
-                    ExternalProviders = new ExternalProvider[] { new ExternalProvider { AuthenticationScheme = context.IdP } }
+                    Username = context.LoginHint,
+                    ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context.IdP } }
                 };
             }
 
@@ -432,7 +431,7 @@ namespace AuthServer.Controllers.Account
             {
                 AutomaticRedirectAfterSignOut = AccountOptions.AutomaticRedirectAfterSignOut,
                 PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
-                ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
+                ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout.ClientName,
                 SignOutIframeUrl = logout?.SignOutIFrameUrl,
                 LogoutId = logoutId
             };
