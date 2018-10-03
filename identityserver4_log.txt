@@ -572,3 +572,11 @@ System.InvalidOperationException: Unable to resolve service for type 'Swashbuckl
 2018-10-02 23:58:56.367 -05:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
 2018-10-02 23:58:56.367 -05:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
 2018-10-02 23:58:56.638 -05:00 [DBG] 0 persisted grants found for 88421113
+2018-10-03 00:01:21.966 -05:00 [DBG] Using idsrv as default scheme for authentication
+2018-10-03 00:01:21.991 -05:00 [DBG] Using idsrv as default scheme for sign-in
+2018-10-03 00:01:21.991 -05:00 [DBG] Using idsrv as default scheme for sign-out
+2018-10-03 00:01:21.991 -05:00 [DBG] Using idsrv as default scheme for challenge
+2018-10-03 00:01:21.991 -05:00 [DBG] Using idsrv as default scheme for forbid
+2018-10-03 00:01:22.210 -05:00 [DBG] Starting token cleanup
+2018-10-03 00:01:22.453 -05:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-10-03 00:01:22.466 -05:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
