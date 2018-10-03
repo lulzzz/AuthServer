@@ -77,7 +77,7 @@ namespace AuthServer
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
             })
-                //this has to be replaced with user logic unimplemented
+                //testuser has to be replaced with either custom profile and validator or asp.net identity(or something else)
                 .AddAspNetIdentity<IdentityUser>()
                 //.AddTestUsers(TestUsers.Users)
                 //.AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
