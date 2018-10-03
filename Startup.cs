@@ -20,6 +20,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using  IdentityServer4.AspNetIdentity;
+using Microsoft.AspNetCore.Identity;
+using  Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace AuthServer
@@ -61,6 +64,12 @@ namespace AuthServer
             //addcertto root and uncomment this and .AddSigningCredentials in env check below
             //var cert = new X509Certificate2(Path.Combine(Environment.ContentRootPath, "vts.code.pfx"), "VTSpASS");
 
+            services.AddDbContext<ApplicationDbContext>(builder =>
+                builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
             var identityServer = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -68,10 +77,9 @@ namespace AuthServer
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
             })
-                
-                
                 //this has to be replaced with user logic unimplemented
-                .AddTestUsers(TestUsers.Users)
+                .AddAspNetIdentity<IdentityUser>()
+                //.AddTestUsers(TestUsers.Users)
                 //.AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
                 //.AddProfileService<ProfileService>()
                 
@@ -94,7 +102,7 @@ namespace AuthServer
                     // options.TokenCleanupInterval = 15; // interval in seconds. 15 seconds useful for debugging
                 });
 
-                services.AddScoped<IUserRepository, UserDataProvider>();
+            //services.AddScoped<IUserRepository, UserDataProvider>();
 
             //services.AddAuthentication()
             //    .AddGoogle(options =>
@@ -104,6 +112,10 @@ namespace AuthServer
             //        options.ClientId = "708996912208-9m4dkjb5hscn7cjrn5u0r4tbgkbj1fko.apps.googleusercontent.com";
             //        options.ClientSecret = "wdfPY6t8H8cecgjlxud__4Gh";
             //    });
+
+            services.AddDbContext<IdentityDbContext>(builder =>
+                builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
+
 
             services.Configure<EmailConfig>(Configuration.GetSection("EmailConfig"));
             services.AddSingleton(Configuration);
@@ -187,5 +199,10 @@ namespace AuthServer
                 }
             }
         }
+    }
+
+    public class ApplicationDbContext : IdentityDbContext
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
     }
 }
