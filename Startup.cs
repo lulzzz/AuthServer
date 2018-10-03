@@ -3,8 +3,10 @@
 
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using AuthServer.Controllers;
 using AuthServer.Interfaces;
 using AuthServer.Providers;
@@ -56,6 +58,9 @@ namespace AuthServer
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
+            //addcertto root and uncomment this and .AddSigningCredentials in env check below
+            //var cert = new X509Certificate2(Path.Combine(Environment.ContentRootPath, "vts.code.pfx"), "VTSpASS");
+
             var identityServer = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -63,10 +68,13 @@ namespace AuthServer
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
             })
+                
+                
                 //this has to be replaced with user logic unimplemented
-                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
-                .AddProfileService<ProfileService>()
                 .AddTestUsers(TestUsers.Users)
+                //.AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
+                //.AddProfileService<ProfileService>()
+                
                 // this adds the config data from DB (clients, resources, CORS)
                 .AddConfigurationStore(options =>
                 {
@@ -106,7 +114,9 @@ namespace AuthServer
             }
             else
             {
+                //when cert is added comment this out and uncomment following line
                 throw new Exception("need to configure key material");
+                //identityServer.AddSigningCredential(cert);
             }
             services.AddSwaggerGen(c =>
             {
