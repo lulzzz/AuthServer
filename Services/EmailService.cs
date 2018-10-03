@@ -103,19 +103,6 @@ namespace AuthServer.Services
         }
     }
 
-    public class SendResult
-    {
-        public ResultType ResultType { get; set; }
-        public string ErrorMessage { get; set; }
-        public Guid? TransactionId { get; set; }
-    }
-
-    public enum ResultType
-    {
-        Success,
-        Error
-    }
-
     public interface IEmailService
     {
         Task SendVerifyEmail(RegistrationViewModel model, string verifyUrl);
