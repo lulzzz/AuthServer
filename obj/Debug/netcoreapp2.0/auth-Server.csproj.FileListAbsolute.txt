@@ -1,0 +1,11 @@
+H:\vts\auth-Server\bin\Debug\netcoreapp2.0\auth-Server.deps.json
+H:\vts\auth-Server\bin\Debug\netcoreapp2.0\auth-Server.runtimeconfig.json
+H:\vts\auth-Server\bin\Debug\netcoreapp2.0\auth-Server.runtimeconfig.dev.json
+H:\vts\auth-Server\bin\Debug\netcoreapp2.0\auth-Server.dll
+H:\vts\auth-Server\bin\Debug\netcoreapp2.0\auth-Server.pdb
+H:\vts\auth-Server\obj\Debug\netcoreapp2.0\auth-Server.csprojAssemblyReference.cache
+H:\vts\auth-Server\obj\Debug\netcoreapp2.0\auth-Server.csproj.CoreCompileInputs.cache
+H:\vts\auth-Server\obj\Debug\netcoreapp2.0\auth-Server.AssemblyInfoInputs.cache
+H:\vts\auth-Server\obj\Debug\netcoreapp2.0\auth-Server.AssemblyInfo.cs
+H:\vts\auth-Server\obj\Debug\netcoreapp2.0\auth-Server.dll
+H:\vts\auth-Server\obj\Debug\netcoreapp2.0\auth-Server.pdb
