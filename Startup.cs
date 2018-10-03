@@ -6,6 +6,9 @@ using System;
 using System.Linq;
 using System.Reflection;
 using AuthServer.Controllers;
+using AuthServer.Interfaces;
+using AuthServer.Providers;
+using AuthServer.Services;
 using AuthServer.Settings;
 using IdentityServer4;
 using IdentityServer4.EntityFramework.DbContexts;
@@ -26,8 +29,16 @@ namespace AuthServer
 
         public Startup(IConfiguration config, IHostingEnvironment env)
         {
-            Configuration = config;
             Environment = env;
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+            Configuration = builder.Build();
+
+            Configuration = config;
         }
 
        
@@ -52,6 +63,9 @@ namespace AuthServer
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
             })
+                //this has to be replaced with user logic unimplemented
+                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
+                .AddProfileService<ProfileService>()
                 .AddTestUsers(TestUsers.Users)
                 // this adds the config data from DB (clients, resources, CORS)
                 .AddConfigurationStore(options =>
@@ -72,16 +86,19 @@ namespace AuthServer
                     // options.TokenCleanupInterval = 15; // interval in seconds. 15 seconds useful for debugging
                 });
 
-            services.AddAuthentication()
-                .AddGoogle(options =>
-                {
-                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                services.AddScoped<IUserRepository, UserDataProvider>();
 
-                    options.ClientId = "708996912208-9m4dkjb5hscn7cjrn5u0r4tbgkbj1fko.apps.googleusercontent.com";
-                    options.ClientSecret = "wdfPY6t8H8cecgjlxud__4Gh";
-                });
+            //services.AddAuthentication()
+            //    .AddGoogle(options =>
+            //    {
+            //        options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+
+            //        options.ClientId = "708996912208-9m4dkjb5hscn7cjrn5u0r4tbgkbj1fko.apps.googleusercontent.com";
+            //        options.ClientSecret = "wdfPY6t8H8cecgjlxud__4Gh";
+            //    });
 
             services.Configure<EmailConfig>(Configuration.GetSection("EmailConfig"));
+            services.AddSingleton(Configuration);
 
             if (Environment.IsDevelopment())
             {
