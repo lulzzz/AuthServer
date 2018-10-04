@@ -121,8 +121,30 @@ namespace AuthServer
                     AllowedCorsOrigins = { "http://localhost:5002" },
 
                     AllowedScopes = { "openid", "profile", "api1" }
+                },
+
+                new Client
+                {
+                    ClientId = "spa2",
+                    ClientName = "My Custom Client",
+                    ClientUri = "http://localhost:4200",
+                    AccessTokenLifetime = 60 * 60 * 24,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    RequireClientSecret = false,
+                    AllowedCorsOrigins = { "http://localhost:4200" },
+                    PostLogoutRedirectUris = { "http://localhost:4200/" },
+                    RedirectUris =
+                    {
+                        "http://localhost:4200/",
+                    },
+                    AllowedScopes =
+                    {
+                        "openid", "profile", "api1"
+                    }
                 }
+
             };
+
         }
     }
 }

@@ -178,11 +178,15 @@ namespace AuthServer
                 context.Database.Migrate();
 
                 
-                if (!context.Clients.Any())
+                if (context.Clients.Count() < Config.GetClients().Count())
                 {
                     foreach (var client in Config.GetClients())
                     {
-                        context.Clients.Add(client.ToEntity());
+                        if (!context.Clients.Any(c => c.ClientName == client.ClientName))
+                        {
+                            context.Clients.Add(client.ToEntity());
+                        }
+                       
                     }
                     context.SaveChanges();
                 }
