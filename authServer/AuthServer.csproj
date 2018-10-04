@@ -34,4 +34,8 @@
     <Folder Include="Migrations\IdentityServer\PersistedGrantDb\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IdentityServer4.WsFederation\IdentityServer4.WsFederation.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -82,7 +82,7 @@ namespace AuthServer
                 options.Events.RaiseSuccessEvents = true;
             })
                 //testuser has to be replaced with either custom profile and validator or asp.net identity(or something else)
-                .AddAspNetIdentity<IdentityUser>()
+                .AddAspNetIdentity<IdentityUser>().AddWsFederation()
                 //.AddTestUsers(TestUsers.Users)
                 //.AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
                 //.AddProfileService<ProfileService>()
