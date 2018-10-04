@@ -3,15 +3,19 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using AuthServer.Controllers;
 using AuthServer.Interfaces;
+using AuthServer.Models;
 using AuthServer.Providers;
 using AuthServer.Services;
 using AuthServer.Settings;
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
@@ -142,7 +146,7 @@ namespace AuthServer
 
         public void Configure(IApplicationBuilder app)
         {
-            //InitializeDatabase(app);
+            InitializeDatabase(app);
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -168,8 +172,8 @@ namespace AuthServer
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
-                serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
-
+                var userContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                userContext.Database.Migrate();
                 var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
                 context.Database.Migrate();
 
@@ -200,6 +204,22 @@ namespace AuthServer
                     }
                     context.SaveChanges();
                 }
+
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                if (!userManager.Users.Any())
+                {
+                    foreach (var testUser in Config.GetTestUsers())
+                    {
+                        var identityUser = new IdentityUser(testUser.Username)
+                        {
+                            Id = testUser.SubjectId
+                        };
+
+                        userManager.CreateAsync(identityUser, "Password123!").Wait();
+                        userManager.AddClaimsAsync(identityUser, testUser.Claims.ToList()).Wait();
+                    }
+                }
+
             }
         }
     }

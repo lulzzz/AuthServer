@@ -2,8 +2,14 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using System;
 using System.Collections.Generic;
+using System.Security.Claims;
+using AuthServer.Models;
+using IdentityModel;
 using IdentityServer4.Models;
+using IdentityServer4.Test;
+using Microsoft.AspNetCore.Identity;
 
 namespace AuthServer
 {
@@ -23,6 +29,40 @@ namespace AuthServer
             return new ApiResource[]
             {
                 new ApiResource("api1", "My API #1")
+            };
+        }
+
+        public static IEnumerable<IdentityUser> GetUser()
+        {
+            return new[]
+            {
+                new IdentityUser
+            {
+                UserName = "jdunn",
+                Email = "jdunn@vehicletracking.com",
+                EmailConfirmed = true,
+                PhoneNumber = "770-328-4147",
+                PhoneNumberConfirmed = true,
+                TwoFactorEnabled = false,
+                SecurityStamp = Guid.NewGuid().ToString()
+
+            }
+            };
+
+        }
+
+        public static List<TestUser> GetTestUsers()
+        {
+            return new List<TestUser> {
+                new TestUser {
+                    SubjectId = "5BE86359-073C-434B-AD2D-A3932222DABE",
+                    Username = "jdunn",
+                    Password = "Password123!",
+                    Claims = new List<Claim> {
+                        new Claim(JwtClaimTypes.Email, "jdunn@vehicletracking.com"),
+                        new Claim(JwtClaimTypes.Role, "admin")
+                    }
+                }
             };
         }
 
