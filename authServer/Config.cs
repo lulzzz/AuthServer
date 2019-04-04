@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using AuthServer.Models;
 using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 using Microsoft.AspNetCore.Identity;
@@ -38,10 +39,10 @@ namespace AuthServer
             {
                 new IdentityUser
             {
-                UserName = "jdunn",
-                Email = "jdunn@vehicletracking.com",
+                UserName = "admin",
+                Email = "admin@email.com",
                 EmailConfirmed = true,
-                PhoneNumber = "770-328-4147",
+                PhoneNumber = "555-555-5555",
                 PhoneNumberConfirmed = true,
                 TwoFactorEnabled = false,
                 SecurityStamp = Guid.NewGuid().ToString()
@@ -56,10 +57,10 @@ namespace AuthServer
             return new List<TestUser> {
                 new TestUser {
                     SubjectId = "5BE86359-073C-434B-AD2D-A3932222DABE",
-                    Username = "jdunn",
+                    Username = "admin",
                     Password = "Password123!",
                     Claims = new List<Claim> {
-                        new Claim(JwtClaimTypes.Email, "jdunn@vehicletracking.com"),
+                        new Claim(JwtClaimTypes.Email, "admin@email.com"),
                         new Claim(JwtClaimTypes.Role, "admin")
                     }
                 }
@@ -122,7 +123,7 @@ namespace AuthServer
 
                     AllowedScopes = { "openid", "profile", "api1" }
                 },
-
+                //legacy resource owner password flow
                 new Client
                 {
                     ClientId = "spa2",
@@ -141,6 +142,13 @@ namespace AuthServer
                     {
                         "openid", "profile", "api1"
                     }
+                },
+                //adfs client
+                new Client
+                {
+                ClientId = "urn:idsrv4:wsfed:client",
+                ProtocolType = IdentityServerConstants.ProtocolTypes.WsFederation,
+                RedirectUris = { "http://localhost:63307/signin-wsfed" },
                 }
 
             };

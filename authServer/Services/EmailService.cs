@@ -60,7 +60,7 @@ namespace AuthServer.Services
 
             var mail = new MailMessage();
             mail.To.Add(new MailAddress(model.Email));
-            mail.Subject = "VTS Registration Confirmation";
+            mail.Subject = "Registration Confirmation";
             mail.IsBodyHtml = true;
             mail.Body = mailBody;
             await SendMailAsync(mail);
@@ -77,7 +77,7 @@ namespace AuthServer.Services
 
             var mail = new MailMessage();
             mail.To.Add(new MailAddress(email));
-            mail.Subject = "VTS Forgot Username";
+            mail.Subject = "Forgot Username";
             mail.IsBodyHtml = true;
             mail.Body = mailBody;
             await SendMailAsync(mail);
@@ -96,7 +96,7 @@ namespace AuthServer.Services
 
             var mail = new MailMessage();
             mail.To.Add(new MailAddress(email));
-            mail.Subject = "VTS Password Reset";
+            mail.Subject = "Password Reset";
             mail.IsBodyHtml = true;
             mail.Body = mailBody;
             await SendMailAsync(mail);

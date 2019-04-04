@@ -66,7 +66,7 @@ namespace AuthServer
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             //addcertto root and uncomment this and .AddSigningCredentials in env check below
-            //var cert = new X509Certificate2(Path.Combine(Environment.ContentRootPath, "vts.code.pfx"), "VTSpASS");
+            //var cert = new X509Certificate2(Path.Combine(Environment.ContentRootPath, "company.code.pfx"), "pASSwOrd");
 
             services.AddDbContext<ApplicationDbContext>(builder =>
                 builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
@@ -163,7 +163,7 @@ namespace AuthServer
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "VTS SSO");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SSO");
             });
         }
 
