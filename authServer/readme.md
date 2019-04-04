@@ -7,6 +7,8 @@ read through the commented code and select providers you would like to configure
 
 to initialize the database go to the startup.cs uncomment the //InitializeDatabase(app); method in the configurer method run the application the tables will be generated automaticly on startup
 
+be sure to comment out the initialize function after the first run otherwise you'll wipe out the database in subsequent runs.
+
 ## setup email
 
 The email settings are in the appsettings the email templates exist in the EmailTemplates folder in root. the various links are to views that might be used in an email.
